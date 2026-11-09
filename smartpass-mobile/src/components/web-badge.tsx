@@ -8,7 +8,7 @@ import { ThemedView } from './themed-view';
 import { Spacing } from '@/constants/theme';
 
 export function WebBadge() {
-  const scheme = useColorScheme() ?? 'dark';
+  const scheme = useColorScheme();
 
   return (
     <ThemedView style={styles.container}>

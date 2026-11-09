@@ -5,9 +5,9 @@ import AppTabs from '@/components/app-tabs';
 import { BudgetProvider } from '@/contexts/budget-context';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme() ?? 'dark';
+  const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'light' ? DefaultTheme : DarkTheme}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <BudgetProvider>
         <AppTabs />
       </BudgetProvider>

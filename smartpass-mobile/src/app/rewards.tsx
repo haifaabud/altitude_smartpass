@@ -9,10 +9,12 @@ import { AnimatedProgressBar } from '@/components/animated-progress-bar';
 import { cafeConfig } from '@/constants/cafe-config';
 import { Elevation, Fonts, Radius } from '@/constants/theme';
 import { useBudget } from '@/contexts/budget-context';
+import { useTheme } from '@/hooks/use-theme';
 import type { RewardEvent } from '@/utils/budget';
 import { getPendingPeriodBonus, getRewardTotals } from '@/utils/rewards';
 
 export default function RewardsScreen() {
+  const theme = useTheme();
   const { budget, expenses, rewardEvents, periodBudgets, completedPeriods } = useBudget();
   const [howRewardsOpen, setHowRewardsOpen] = useState(false);
   const rewardData = { budget, expenses, rewardEvents, periodBudgets, completedPeriods };
@@ -33,24 +35,24 @@ export default function RewardsScreen() {
   const pointsNeeded = Math.max(cafeConfig.loyalty.rewardThreshold - totalPoints, 0);
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
+    <SafeAreaView edges={['top']} style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <StatusBar style="dark" />
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <AltitudeBrand />
-            <Text style={styles.badge}>LOCAL LOYALTY</Text>
+            <AltitudeBrand color={theme.text} />
+            <Text style={[styles.badge, { color: theme.primary }]}>LOCAL LOYALTY</Text>
           </View>
 
           <View style={styles.intro}>
-            <Text style={styles.eyebrow}>A LITTLE SOMETHING EXTRA</Text>
-            <Text style={styles.title}>Good coffee adds up.</Text>
-            <Text style={styles.subtitle}>
+            <Text style={[styles.eyebrow, { color: theme.accent }]}>A LITTLE SOMETHING EXTRA</Text>
+            <Text style={[styles.title, { color: theme.text }]}>Good coffee adds up.</Text>
+            <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
               Collect points with the Altitude drinks and bites you already enjoy.
             </Text>
           </View>
 
-          <AnimatedEntrance style={styles.pointsCard}>
+          <AnimatedEntrance style={[styles.pointsCard, { backgroundColor: theme.primary }]}>
             <View style={styles.pointsHeading}>
               <View style={styles.starMark}>
                 <Text style={styles.star}>★</Text>
@@ -90,13 +92,13 @@ export default function RewardsScreen() {
             </View>
           </AnimatedEntrance>
 
-          <AnimatedEntrance style={styles.earnCard}>
-            <Text style={styles.earnTitle}>Two ways to earn.</Text>
-            <Text style={styles.earnBody}>
+          <AnimatedEntrance style={[styles.earnCard, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
+            <Text style={[styles.earnTitle, { color: theme.text }]}>Two ways to earn.</Text>
+            <Text style={[styles.earnBody, { color: theme.textSecondary }]}>
               Purchase points are fixed per qualifying entry. A separate period bonus is earned
               when your weekly or monthly plan ends within budget.
             </Text>
-            <Text style={styles.pendingBonus}>
+            <Text style={[styles.pendingBonus, { color: theme.primary }]}>
               {pendingBonus > 0
                 ? `+${pendingBonus} points pending for this ${budget?.period ?? 'budget'} period`
                 : budget
@@ -108,21 +110,21 @@ export default function RewardsScreen() {
           <Pressable
             accessibilityRole="button"
             onPress={() => setHowRewardsOpen(true)}
-            style={styles.howButton}>
-            <View style={styles.infoIcon}>
-              <Text style={styles.infoIconText}>i</Text>
+            style={[styles.howButton, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
+            <View style={[styles.infoIcon, { backgroundColor: theme.backgroundSelected }]}>
+              <Text style={[styles.infoIconText, { color: theme.primary }]}>i</Text>
             </View>
-            <Text style={styles.howButtonText}>How Rewards Work</Text>
-            <Text style={styles.howButtonArrow}>→</Text>
+            <Text style={[styles.howButtonText, { color: theme.text }]}>How Rewards Work</Text>
+            <Text style={[styles.howButtonArrow, { color: theme.textSecondary }]}>→</Text>
           </Pressable>
 
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your first café treat</Text>
-            <Text style={styles.thresholdBadge}>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>Your first café treat</Text>
+            <Text style={[styles.thresholdBadge, { color: theme.accent }]}>
               {cafeConfig.loyalty.rewardThreshold} POINTS
             </Text>
           </View>
-          <AnimatedEntrance style={styles.rewardCard}>
+          <AnimatedEntrance style={[styles.rewardCard, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
             <View style={styles.rewardIcon}>
               <Text style={styles.rewardIconText}>☕</Text>
             </View>
@@ -133,12 +135,12 @@ export default function RewardsScreen() {
           </AnimatedEntrance>
 
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Rewards activity</Text>
-            <Text style={styles.activityCount}>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>Rewards activity</Text>
+            <Text style={[styles.activityCount, { color: theme.textSecondary }]}>
               {recentRewardEvents.length} {recentRewardEvents.length === 1 ? 'ENTRY' : 'ENTRIES'}
             </Text>
           </View>
-          <AnimatedEntrance style={styles.activityCard}>
+          <AnimatedEntrance style={[styles.activityCard, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
             {recentRewardEvents.length > 0 ? (
               recentRewardEvents.map((event) => (
                 <RewardActivityRow
@@ -156,7 +158,7 @@ export default function RewardsScreen() {
             )}
           </AnimatedEntrance>
 
-          <Text style={styles.demoNote}>
+          <Text style={[styles.demoNote, { color: theme.textSecondary }]}>
             Points are estimated from manually recorded expenses and saved on this device. Rewards
             are not verified or redeemable in this demo.
           </Text>

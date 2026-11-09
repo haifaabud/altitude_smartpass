@@ -8,6 +8,7 @@ import { CoffeeBean } from '@/components/coffee-bean';
 import { CoffeeEditorialHero } from '@/components/coffee-editorial-hero';
 import { cafeConfig, formatCurrency } from '@/constants/cafe-config';
 import { Fonts, Radius } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 const espressoMenu = [
   { name: 'Single Espresso', price: 10 },
@@ -36,16 +37,18 @@ const manualMenu = [
 ];
 
 export default function MenuScreen() {
+  const theme = useTheme();
+
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
+    <SafeAreaView edges={['top']} style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <StatusBar style="dark" />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <AltitudeBrand />
-            <Text style={styles.menuBadge}>THE MENU</Text>
+            <AltitudeBrand color={theme.text} />
+            <Text style={[styles.menuBadge, { color: theme.primary }]}>THE MENU</Text>
           </View>
 
           <CoffeeEditorialHero
@@ -56,10 +59,10 @@ export default function MenuScreen() {
           />
 
           <AnimatedEntrance>
-            <MenuSection title="Espresso bar" items={espressoMenu} />
+            <MenuSection title="Espresso bar" items={espressoMenu} theme={theme} />
           </AnimatedEntrance>
           <AnimatedEntrance>
-            <MenuSection title="Manual bar" items={manualMenu} />
+            <MenuSection title="Manual bar" items={manualMenu} theme={theme} />
           </AnimatedEntrance>
 
           <View style={styles.footer}>
@@ -67,8 +70,8 @@ export default function MenuScreen() {
               <CoffeeBean size={22} color="#74533D" seamColor="#E7CCAE" rotation="-36deg" />
               <CoffeeBean size={22} color={cafeConfig.theme.primary} seamColor="#E7CCAE" rotation="36deg" />
             </View>
-            <Text style={styles.footerText}>Made for your next coffee break.</Text>
-            <Text style={styles.demoNote}>Sample menu · Prices shown in AED</Text>
+            <Text style={[styles.footerText, { color: theme.text }]}>Made for your next coffee break.</Text>
+            <Text style={[styles.demoNote, { color: theme.textSecondary }]}>Sample menu · Prices shown in AED</Text>
           </View>
         </View>
       </ScrollView>
@@ -79,23 +82,27 @@ export default function MenuScreen() {
 function MenuSection({
   title,
   items,
+  theme,
 }: {
   title: string;
   items: { name: string; price: number }[];
+  theme: ReturnType<typeof useTheme>;
 }) {
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeading}>
-        <View style={styles.sectionMark}>
+        <View style={[styles.sectionMark, { backgroundColor: theme.backgroundSelected }]}>
           <CoffeeBean size={17} color={cafeConfig.theme.primary} seamColor="#E6D0B9" rotation="-24deg" />
         </View>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>{title}</Text>
       </View>
-      <View style={styles.menuCard}>
+      <View style={[styles.menuCard, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
         {items.map((item, index) => (
-          <View key={item.name} style={[styles.menuRow, index > 0 && styles.menuRowBorder]}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemPrice}>{formatCurrency(item.price)}</Text>
+          <View
+            key={item.name}
+            style={[styles.menuRow, index > 0 && styles.menuRowBorder, { borderTopColor: theme.border }]}>
+            <Text style={[styles.itemName, { color: theme.text }]}>{item.name}</Text>
+            <Text style={[styles.itemPrice, { color: theme.primary }]}>{formatCurrency(item.price)}</Text>
           </View>
         ))}
       </View>
@@ -106,7 +113,6 @@ function MenuSection({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: cafeConfig.theme.cream,
   },
   scrollContent: {
     alignItems: 'center',
@@ -124,7 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   menuBadge: {
-    color: cafeConfig.theme.primary,
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.9,
@@ -144,10 +149,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: Radius.small,
-    backgroundColor: cafeConfig.theme.tint,
   },
   sectionTitle: {
-    color: cafeConfig.theme.text,
     fontFamily: Fonts.serif,
     fontSize: 17,
     fontWeight: '500',
@@ -155,9 +158,7 @@ const styles = StyleSheet.create({
   menuCard: {
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: cafeConfig.theme.border,
     borderRadius: Radius.medium,
-    backgroundColor: cafeConfig.theme.surface,
   },
   menuRow: {
     minHeight: 45,
@@ -168,16 +169,13 @@ const styles = StyleSheet.create({
   },
   menuRowBorder: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: cafeConfig.theme.border,
   },
   itemName: {
     flex: 1,
-    color: cafeConfig.theme.text,
     fontSize: 11,
     fontWeight: '500',
   },
   itemPrice: {
-    color: cafeConfig.theme.primary,
     fontSize: 11,
     fontWeight: '700',
   },
@@ -193,13 +191,11 @@ const styles = StyleSheet.create({
   },
   footerText: {
     marginTop: 6,
-    color: cafeConfig.theme.text,
     fontFamily: Fonts.serif,
     fontSize: 13,
   },
   demoNote: {
     marginTop: 5,
-    color: cafeConfig.theme.textSecondary,
     fontSize: 10,
   },
 });
