@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.haa4338.smartpassmobile"
     },
     "web": {
       "output": "server",
@@ -36,6 +37,16 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "7fe5283d-a7ba-4a0d-976a-4e61047eb40b"
+      }
     }
   }
 }
